@@ -470,8 +470,12 @@
                     <label for="new-user-email">Email Address</label>
                     <input type="email" id="new-user-email" required>
                 </div>
+                <div class="form-group">
+                    <label for="new-user-uid">User ID (from Authentication)</label>
+                    <input type="text" id="new-user-uid" required>
+                </div>
                 <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-top: -10px;">
-                    Note: A user with this email must first be created in the Firebase Authentication console. This form only creates their profile and permissions within the dashboard.
+                    Note: A user must first be created in the Firebase Authentication console. Copy their UID from there and paste it above. This form creates their corresponding profile and permissions within the dashboard.
                 </p>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
@@ -587,7 +591,7 @@
         const addUserModal=t('#add-user-modal');
         t('#add-user-btn').addEventListener('click',()=>I(addUserModal,true));
         v('#add-user-modal .modal-close, #add-user-modal .modal-cancel').forEach(btn=>btn.addEventListener('click',()=>I(addUserModal,false)));
-        t('#add-user-form').addEventListener('submit',async(event)=>{event.preventDefault();const name=t('#new-user-name').value;const email=t('#new-user-email').value;try{const usersRef=g(s,"users");const q_query=h(usersRef,bb("email","==",email));const querySnapshot=await o(q_query);if(!querySnapshot.empty){return aq('Error','A user profile with this email already exists.')}const defaultPermissions=permissionsMap.reduce((acc,p)=>(acc[p.key]=false,acc),{});await l(j(usersRef),{name:name,email:email,permissions:defaultPermissions});aq('Success','User profile created. Please create a matching user in Firebase Authentication.');I(addUserModal,false);loadUserManagement()}catch(error){console.error("Error creating user profile:",error);aq('Error',`Failed to create profile: ${error.message}`)}});
+        t('#add-user-form').addEventListener('submit',async(event)=>{event.preventDefault();const name=t('#new-user-name').value;const email=t('#new-user-email').value;const uid=t('#new-user-uid').value;if(!uid.trim()){return aq('Error','User ID cannot be empty.')}try{const usersRef=g(s,"users");const emailQuery=h(usersRef,bb("email","==",email));const emailSnapshot=await o(emailQuery);if(!emailSnapshot.empty){return aq('Error','A user profile with this email already exists.')}const userDocRef=j(s,"users",uid);const userDocSnap=await k(userDocRef);if(userDocSnap.exists()){return aq('Error','A user profile with this UID already exists.')}const defaultPermissions=permissionsMap.reduce((acc,p)=>(acc[p.key]=false,acc),{});await l(userDocRef,{name:name,email:email,permissions:defaultPermissions});aq('Success','User profile created successfully.');I(addUserModal,false);loadUserManagement()}catch(error){console.error("Error creating user profile:",error);aq('Error',`Failed to create profile: ${error.message}`)}});
         const loadSettings=()=>{t('#setting-user-name').value=currentUserInfo.name||'';t('#setting-user-email').value=currentUserInfo.email||'';const grid=t('#my-permissions-grid');grid.innerHTML='';permissionsMap.forEach(p=>{const hasPerm=userCan(p.key);const permItem=document.createElement('div');permItem.className=`permission-item ${hasPerm?'active':'inactive'}`;permItem.innerHTML=`<span>${hasPerm?'✓':'✗'}</span> ${p.label}`;grid.appendChild(permItem)})};
         t('#settings-btn').addEventListener('click',()=>G('settings'));
         const themeToggle=t('#theme-toggle');const body=document.body;
@@ -662,4 +666,4 @@
         mobileNavOverlay.addEventListener('click',()=>{document.body.classList.remove('sidebar-open');mobileMenuToggle.classList.remove('active')});
     </script>
 </body>
-</html>
+</html>            
