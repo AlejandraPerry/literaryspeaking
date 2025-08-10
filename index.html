@@ -19,13 +19,54 @@
         .hidden { display: none !important; }
         .image-grid-2 .form-container { text-align: left; padding: 0; }
         .section-theme-purple-2 { --section-bg:#f3e5f5; --section-main-color:#8e24aa; }
+
+        /* Slideshow styles */
+        .hero-banner {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .hero-banner img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .hero-banner img.active {
+            opacity: 1;
+        }
+        .overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 1;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
     </style>
 </head>
 <body data-current-page="home">
     <header class="site-header" id="header"></header>
 
     <main>
-        <section class="hero-banner" id="home" style="background-image: url('https://i.imgur.com/GSyW2Ck.png');">
+        <section class="hero-banner" id="home">
+            <!-- Slideshow Images -->
+            <img src="https://i.imgur.com/GSyW2Ck.png" class="active" alt="Slide 1">
+            <img src="https://i.imgur.com/A1h7uXY.jpeg" alt="Slide 2">
+            <img src="https://i.imgur.com/rCkXWwQ.jpeg" alt="Slide 3">
+            <img src="https://i.imgur.com/dJ1YXYh.jpeg" alt="Slide 4">
+            <img src="https://i.imgur.com/Yqz9pXQ.jpeg" alt="Slide 5">
+
             <div class="overlay"></div>
             <div class="content scroll-animated">
                 <h1 class="lang-switch" data-en="Tutoring & Mentorship" data-es="La diferencia de idioma no debería ser una barrera para el éxito."></h1>
@@ -33,6 +74,21 @@
                 <a data-page-id="receive-tutoring" class="btn lang-switch nav-link" data-en="Receive Assistance" data-es="Recibir Asistencia"></a>
             </div>
         </section>
+    </main>
+
+    <script>
+        const slides = document.querySelectorAll('.hero-banner img');
+        let currentSlide = 0;
+
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 4000); // Change every 4 seconds
+    </script>
+</body>
+</html>
+
 
         <section class="section section-theme-blue">
             <div class="container">
@@ -344,6 +400,7 @@
     </script>
 </body>
 </html> <!-- bKOY+h2lyeycu9f36/XEIeh+gHsv+FYpa6EnFvLYiXAjqxnZNYjn5xgN+bi8hKWTOV1J8YZ33RHaUjUc7v/sczFVB1R727vfto2lp2KtAoR5Apby4/zG/wpyBd1Y+CFPh+wirrRDJb9gV640xupy0w== -->
+
 
 
 
