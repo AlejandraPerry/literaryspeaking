@@ -29,6 +29,7 @@
             align-items: center;
             justify-content: center;
             color: white;
+            touch-action: pan-y;
         }
         .hero-banner img {
             position: absolute;
@@ -37,6 +38,8 @@
             object-fit: cover;
             opacity: 0;
             transition: opacity 1s ease-in-out;
+            user-select: none;
+            pointer-events: none;
         }
         .hero-banner img.active {
             opacity: 1;
@@ -52,6 +55,29 @@
             position: relative;
             z-index: 2;
             text-align: center;
+            padding: 0 15px;
+        }
+
+        /* Dot indicators */
+        .dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 3;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .dot.active {
+            background: white;
         }
     </style>
 </head>
@@ -73,22 +99,85 @@
                 <p class="lang-switch" data-en="Free in-person and online assistance for those learning English" data-es="Asistencia gratuita en persona y en línea para quienes están aprendiendo inglés."></p>
                 <a data-page-id="receive-tutoring" class="btn lang-switch nav-link" data-en="Receive Assistance" data-es="Recibir Asistencia"></a>
             </div>
+
+            <!-- Dot Indicators -->
+            <div class="dots"></div>
         </section>
     </main>
 
     <script>
         const slides = document.querySelectorAll('.hero-banner img');
+        const dotsContainer = document.querySelector('.dots');
         let currentSlide = 0;
+        let autoSlideInterval;
+        const heroBanner = document.querySelector('.hero-banner');
 
-        setInterval(() => {
+        // Create dots dynamically
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                showSlide(index);
+                resetAutoSlide();
+            });
+            dotsContainer.appendChild(dot);
+        });
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
             slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
+            dots[currentSlide].classList.remove('active');
+
+            currentSlide = (index + slides.length) % slides.length;
+
             slides[currentSlide].classList.add('active');
-        }, 4000); // Change every 4 seconds
+            dots[currentSlide].classList.add('active');
+        }
+
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 4000);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+
+        // Auto start
+        startAutoSlide();
+
+        // Swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        heroBanner.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        heroBanner.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeDistance = touchEndX - touchStartX;
+            if (Math.abs(swipeDistance) > 50) {
+                if (swipeDistance > 0) {
+                    // Swipe right - previous
+                    showSlide(currentSlide - 1);
+                } else {
+                    // Swipe left - next
+                    showSlide(currentSlide + 1);
+                }
+                resetAutoSlide();
+            }
+        }
     </script>
 </body>
 </html>
-
 
         <section class="section section-theme-blue">
             <div class="container">
@@ -400,6 +489,7 @@
     </script>
 </body>
 </html> <!-- bKOY+h2lyeycu9f36/XEIeh+gHsv+FYpa6EnFvLYiXAjqxnZNYjn5xgN+bi8hKWTOV1J8YZ33RHaUjUc7v/sczFVB1R727vfto2lp2KtAoR5Apby4/zG/wpyBd1Y+CFPh+wirrRDJb9gV640xupy0w== -->
+
 
 
 
