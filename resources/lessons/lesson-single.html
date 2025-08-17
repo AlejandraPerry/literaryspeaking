@@ -240,7 +240,7 @@
                     contentHTML += `<div class="module-title">${module[`title_${lang}`]}</div>`;
                     let unitsHTML = (module.units || []).map((unit, unitIndex) => {
                         const params = `subjectId=${subject.id}&courseIndex=${courseIndex}&moduleIndex=${moduleIndex}&unitIndex=${unitIndex}&fromPanel=modules`;
-                        const url = `/course-unit?${params}`;
+                        const url = `/resources/lessons/course-unit?${params}`;
                         return `<li class="unit-item"><a href="${url}">${unit[`title_${lang}`]}</a></li>`;
                     }).join('');
                     contentHTML += `<ul class="unit-list">${unitsHTML}</ul>`;
