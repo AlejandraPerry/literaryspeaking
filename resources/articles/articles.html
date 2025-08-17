@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/WPy5YDY.png">
+    <title>Articles | Literary Speaking</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "d12debe4-4f24-4db4-bfa5-9f6ee5f38d48",
+        });
+      });
+    </script>
+    <style>
+        .hero-banner{height:60vh;min-height:400px;display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;position:relative;padding:0 20px;background-image:url(https://i.imgur.com/WKLVGfz.jpeg);background-attachment:fixed;background-position:center;background-repeat:no-repeat;background-size:cover}
+        .hero-banner .overlay{position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:2}
+        .hero-banner .content{position:relative;z-index:3}
+        .hero-banner h1{font-size:3.8rem;font-weight:900;margin:0;line-height:1.2}
+        
+        .articles-layout {display:grid;grid-template-columns:3fr 1fr;gap:50px;align-items:flex-start;}
+        .article-grid {display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:30px;}
+        .article-card {background-color:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.08);transition:transform .3s ease, box-shadow .3s ease;display:flex;flex-direction:column;text-align:left;cursor:pointer;}
+        .article-card:hover {transform:translateY(-8px);box-shadow:0 12px 32px rgba(0,0,0,0.12);}
+        .article-card-image-wrapper {position:relative;width:100%;aspect-ratio:16/9;}
+        .article-card-image {width:100%;height:100%;object-fit:cover;}
+        .article-card-category {position:absolute;top:15px;left:15px;background-color:var(--color-green-dark);color:white;padding:5px 12px;border-radius:100px;font-size:0.8rem;font-weight:700;}
+        .article-card-content {padding:25px;flex-grow:1;display:flex;flex-direction:column;}
+        .article-card-meta {font-size:0.9rem;color:var(--color-text-light);margin-bottom:15px;display:flex;align-items:center;gap:15px;}
+        .article-card-meta svg {width:14px;height:14px;margin-right:5px;vertical-align:middle;}
+        .article-card-title {font-size:1.4rem;font-weight:700;margin:0 0 15px;line-height:1.3;color:var(--color-text);}
+        .article-card-excerpt {font-size:1rem;line-height:1.6;color:var(--color-text-light);flex-grow:1;}
+        .article-card-footer {display:flex;justify-content:space-between;align-items:center;padding:20px 25px;border-top:1px solid #eee;font-size:0.9rem;color:var(--color-text-light);}
+        .read-more-link {color:var(--color-purple-dark);text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px;}
+        .read-more-link:hover {text-decoration:underline;}
+        .read-more-link svg {width:16px;height:16px;transition:transform .3s ease;}
+        .read-more-link:hover svg {transform:translateX(4px);}
+        
+        .sidebar{position:sticky;top:100px;text-align:left;}
+        .sidebar-widget{margin-bottom:40px;}
+        .sidebar-widget-title{font-size:1.3rem;font-weight:700;margin-bottom:15px;border-bottom:2px solid var(--color-purple);padding-bottom:10px;}
+        .sidebar-widget ul{list-style:none;padding:0;margin:0;}
+        .sidebar-widget ul li{margin-bottom:12px;}
+        .sidebar-widget ul li a{text-decoration:none;color:var(--color-text-light);font-weight:500;cursor:pointer;font-size:1rem;}
+        .sidebar-widget ul li a:hover{color:var(--color-purple-dark);}
+        .sidebar-widget ul li a.active-filter{color:var(--color-purple-dark);font-weight:700;}
+
+        @media (max-width:900px){.articles-layout{grid-template-columns:1fr;}.sidebar{position:static;margin-top:60px;}}
+        @media (max-width:768px){.hero-banner{background-attachment:scroll;}.hero-banner h1{font-size:2.2rem;}.article-grid{grid-template-columns:1fr;}}
+    </style>
+</head>
+<body data-current-page="articles">
+    <header class="site-header" id="header"></header>
+
+    <main>
+        <section class="hero-banner">
+            <div class="overlay"></div>
+            <div class="content scroll-animated">
+                <h1 class="lang-switch" data-en="Articles" data-es="Artículos"></h1>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="articles-layout">
+                    <div class="article-grid" id="article-grid-container">
+                    </div>
+                    <aside class="sidebar scroll-animated" id="sidebar-container">
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer"></footer>
+
+    <script src="router.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0qVihpuLI0cF0PZ32o8tFBLfTgjlqB6A",
+            authDomain: "literary-speaking.firebaseapp.com",
+            projectId: "literary-speaking",
+            storageBucket: "literary-speaking.appspot.com",
+            messagingSenderId: "699059463612",
+            appId: "1:699059463612:web:ecb2e784d627c6b93937b9",
+            measurementId: "G-0L1V3XXGGR"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await siteRouter.loadMembers();
+            
+            const articlesQuery = query(collection(db, "articles"), orderBy("date", "desc"));
+            const querySnapshot = await getDocs(articlesQuery);
+            const articles = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).filter(article => article.isPublished === true);
+
+            const gridContainer = document.getElementById('article-grid-container');
+            const sidebarContainer = document.getElementById('sidebar-container');
+            
+            let currentFilters = { author: 'all', archive: 'all', category: 'all' };
+
+            if (!gridContainer || !articles || !sidebarContainer) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            const getUniqueSidebarData = (lang) => {
+                const authors = new Map();
+                const archives = new Map();
+                const categories = new Map();
+
+                articles.forEach(article => {
+                    if (!authors.has(article.author_id)) {
+                        const author = siteRouter.members[article.author_id];
+                        if (author) authors.set(article.author_id, author.name);
+                    }
+                    
+                    const categoryKey = article.category_en;
+                    if (!categories.has(categoryKey)) {
+                        categories.set(categoryKey, { en: article.category_en, es: article.category_es });
+                    }
+                    
+                    const date = new Date(article.date);
+                    const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    if (!archives.has(yearMonth)) {
+                        let monthName = date.toLocaleDateString(lang.startsWith('es') ? 'es-ES' : 'en-US', { month: 'long', year: 'numeric' });
+                        if (lang.startsWith('es')) {
+                            monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+                        }
+                        archives.set(yearMonth, monthName);
+                    }
+                });
+                return { authors, archives, categories };
+            };
+
+            const populateSidebar = (lang) => {
+                const { authors, archives, categories } = getUniqueSidebarData(lang);
+                sidebarContainer.innerHTML = `
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-widget-title lang-switch" data-en="Authors" data-es="Autores">Authors</h3>
+                        <ul id="authors-list"></ul>
+                    </div>
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-widget-title lang-switch" data-en="Archives" data-es="Archivos">Archives</h3>
+                        <ul id="archives-list"></ul>
+                    </div>
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-widget-title lang-switch" data-en="Categories" data-es="Categorías">Categories</h3>
+                        <ul id="categories-list"></ul>
+                    </div>
+                `;
+
+                const createList = (listId, data, type, nameField) => {
+                    const list = document.getElementById(listId);
+                    list.innerHTML = `<li><a href="#" data-filter-type="${type}" data-filter-value="all">${lang === 'es' ? 'Todo' : 'All'}</a></li>`;
+                    data.forEach((value, key) => {
+                        list.innerHTML += `<li><a href="#" data-filter-type="${type}" data-filter-value="${key}">${nameField ? value[nameField] : value}</a></li>`;
+                    });
+                };
+                
+                createList('authors-list', authors, 'author');
+                createList('archives-list', archives, 'archive');
+                createList('categories-list', categories, 'category', lang);
+
+                sidebarContainer.querySelectorAll('a[data-filter-type]').forEach(link => {
+                    link.addEventListener('click', handleFilterClick);
+                });
+                updateActiveFilters();
+            };
+
+            const updateActiveFilters = () => {
+                sidebarContainer.querySelectorAll('a').forEach(l => l.classList.remove('active-filter'));
+                document.querySelector(`#authors-list a[data-filter-value="${currentFilters.author}"]`)?.classList.add('active-filter');
+                document.querySelector(`#archives-list a[data-filter-value="${currentFilters.archive}"]`)?.classList.add('active-filter');
+                document.querySelector(`#categories-list a[data-filter-value="${currentFilters.category}"]`)?.classList.add('active-filter');
+            };
+
+            const populateGrid = (lang) => {
+                gridContainer.innerHTML = '';
+                articles.forEach(article => {
+                    const author = siteRouter.members[article.author_id];
+                    const authorName = author ? author.name : 'Anonymous';
+                    const articleDate = new Date(article.date);
+                    const displayDate = articleDate.toLocaleDateString(lang.startsWith('es') ? 'es-ES' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    const archiveKey = `${articleDate.getFullYear()}-${String(articleDate.getMonth() + 1).padStart(2, '0')}`;
+
+                    const card = document.createElement('div');
+                    card.className = 'article-card scroll-animated';
+                    card.dataset.pageId = 'article-single'; 
+                    card.dataset.articleId = article.id;
+                    card.dataset.author = article.author_id;
+                    card.dataset.archive = archiveKey;
+                    card.dataset.category = article.category_en;
+                    
+                    const authorMatch = currentFilters.author === 'all' || card.dataset.author === currentFilters.author;
+                    const archiveMatch = currentFilters.archive === 'all' || card.dataset.archive === currentFilters.archive;
+                    const categoryMatch = currentFilters.category === 'all' || card.dataset.category === currentFilters.category;
+                    
+                    if (authorMatch && archiveMatch && categoryMatch) {
+                        card.innerHTML = `
+                            <div class="article-card-image-wrapper">
+                                <img src="${article.thumbnail_url || 'https://i.imgur.com/3Yj6bA1.png'}" alt="" class="article-card-image">
+                                <div class="article-card-category">${article[`category_${lang}`]}</div>
+                            </div>
+                            <div class="article-card-content">
+                                <div class="article-card-meta">
+                                    <span><svg fill="currentColor" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>${authorName}</span>
+                                    <span><svg fill="currentColor" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/></svg>${displayDate}</span>
+                                </div>
+                                <h3 class="article-card-title">${article[`title_${lang}`]}</h3>
+                                <p class="article-card-excerpt">${article[`excerpt_${lang}`]}</p>
+                            </div>
+                            <div class="article-card-footer">
+                                <span>${article[`read_time_${lang}`]}</span>
+                                <span class="read-more-link">${lang === 'es' ? 'Leer Más' : 'Read More'}<svg fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/></svg></span>
+                            </div>
+                        `;
+                        gridContainer.appendChild(card);
+                        observer.observe(card);
+                        card.addEventListener('click', () => siteRouter.navigateTo('article-single', article.id));
+                    }
+                });
+            };
+
+            const handleFilterClick = (event) => {
+                event.preventDefault();
+                const link = event.currentTarget;
+                const filterType = link.dataset.filterType;
+                const filterValue = link.dataset.filterValue;
+
+                currentFilters[filterType] = filterValue;
+                updateActiveFilters();
+                populateGrid(document.documentElement.lang);
+            };
+
+            const initialLang = localStorage.getItem('language') || 'en';
+            populateSidebar(initialLang);
+            populateGrid(initialLang);
+
+            const langObserver = new MutationObserver(() => {
+                const lang = document.documentElement.lang;
+                populateSidebar(lang);
+                populateGrid(lang);
+            });
+            langObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+            
+            document.querySelectorAll('main .scroll-animated').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
