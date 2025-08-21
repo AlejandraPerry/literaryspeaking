@@ -24,7 +24,7 @@ Users can subscribe to our newsletter to receive seasonal notifications on our e
 
 ## How we built it
 
-**Planning & Design**: We started with a basic mock-up: rough styling, no tabs nor grouping, and no lesson implementation. Then, we researched user needs, the most appealing styles for our target audience (middle school through college students). After, we implemented the strategies, leading to our finished site.
+**Planning & Design**: We started with a basic mock-up: rough styling, no tabs nor grouping, and no lesson implementation. Then, we researched user needs, the most appealing styles with an emphasis for a user-friendly interface. After, we implemented the strategies, leading to our finished site.
 
 **Technology Stack**: We started using NodeJS and EJS for a dynamic site, but after realizing GitHub Pages did not support dynamic websites, we sticked to the ordinary HTML, CSS, and JS combination, using a router.js file to implement the dynamic functionality NodeJS and EJS provided.
 
