@@ -108,6 +108,13 @@ Tutoría y Mentoría de Literary Speaking"></p>
             </div>
         </section>
 
+        <section class="section" style="--section-bg: var(--color-purple)">
+            <div class="container">
+                <h2 class="section-title lang-switch" data-en="Our Mentors" data-es="Nuestros Mentores"></h2>
+                <div class="team-grid" id="mentors-grid"></div>
+            </div>
+        </section>
+
         <section class="section" style="--section-bg: var(--color-red)">
             <div class="container">
                 <h2 class="section-title lang-switch" data-en="Outreach/Marketing Team" data-es="Equipo de Alcance/Marketing"></h2>
@@ -144,6 +151,8 @@ Tutoría y Mentoría de Literary Speaking"></p>
             ];
 
             const newsletterTeam = ['natalie-arenal000', 'alejandra-rivero000'];
+
+            const mentors = ['dianela-rodriguez000'];
 
             const tutors = [
                 'sofia-gonzalez-carba000', 'isabella-stubbs000', 'eimy-gil000', 'nicole-alvarez000',
@@ -202,6 +211,7 @@ Tutoría y Mentoría de Literary Speaking"></p>
             populateTeamSection('#pwb-board-grid', pwbBoard, currentLang);
             populateTeamSection('#mcp-board-grid', mcpBoard, currentLang);
             populateTeamSection('#newsletter-grid', newsletterTeam, currentLang);
+            populateTeamSection('#mentors-grid', mentors, currentLang);
             populateTeamSection('#tutors-grid', tutors, currentLang);
             populateTeamSection('#outreach-grid', outreachTeam, currentLang);
             populateTeamSection('#previous-volunteers-grid', previousVolunteers, currentLang);
