@@ -22,28 +22,6 @@ Users of our website can navigate between our bilingual articles and lessons, al
 
 Users can subscribe to our newsletter to receive seasonal notifications on our events and updates. They can also visit our news page to learn more about previous and current events. The website can be dynamically modified using the admin page, where the site manager can set permissions for users, modify and publish content, and supervise comments and form submissions. 
 
-## How we built it
-
-**Planning & Design**: We started with a basic mock-up: rough styling, no tabs nor grouping, and no lesson implementation. Then, we researched user needs, the most appealing styles with an emphasis for a user-friendly interface. After, we implemented the strategies, leading to our finished site.
-
-**Technology Stack**: We started using NodeJS and EJS for a dynamic site, but after realizing GitHub Pages did not support dynamic websites, we sticked to the ordinary HTML, CSS, and JS combination, using a router.js file to implement the dynamic functionality NodeJS and EJS provided.
-
-**Feedback**: We ran 5 polls, asking more than 30 people on feedback to fine-tune the website.
-
-## Challenges we ran into
-
-**Technical Challenges**: We had problems with dynamic functionality, since GitHub does not support dynamic webpages. We also had problems figuring out route handling in GitHub, since GitHub does not support route handling and automatically finds an html file depending on the searched route. Although much more complex, we solved the dynamic functionality problem with a router.js file, which was able to make GET and PUSH requests to a Firebase database.
-
 ## Accomplishments that we're proud of
 
 Since beginning in January 2024, we’ve been able to establish Literary Speaking at three schools, individually impact more than 80 students with 92% greater confidence across Miami, and build a team of more than 40 volunteers who have participated in the program for over 1000 hours throughout the school year. Through this platform, we’ve been able to donate $1500 worth of donations to local organizations with more than 200 participants.
-
-## What we learned
-
-**Technical Skills**: Two people in our team did not know how to use HTML, CSS, and JS. They learnt how to efficiently design a website in HTML, and best practices in both CSS and JS.
-
-**Teamwork**: We learnt how to efficiently use GitHub for pull and push requests, and how to split work evenly amongst each other.
-
-## What's next for Literary Speaking: Tutoring & Mentorship 
-
-We will continue to use technology and human philanthropy to build a platform that serves the academic, professional, and personal needs of English Language Learners. This includes growing our team to help learners academically and professionally.
