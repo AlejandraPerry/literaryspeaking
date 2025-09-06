@@ -345,20 +345,27 @@ img {
 }
 
 .hero-banner {
+  position: relative;
+  width: 100%;
   height: 100vh;
   min-height: 700px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
   text-align: center;
-  position: relative;
+  color: #fff;
   padding: 0 20px;
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: #000;
+  overflow: hidden;
+}
+
+.hero-banner .hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* makes the video behave like a background image */
+  z-index: -2;
 }
 
 .hero-banner .overlay {
@@ -367,50 +374,44 @@ img {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
+  background: rgba(0, 0, 0, 0.5); /* dark overlay for text readability */
+  z-index: -1;
 }
 
 .hero-banner .content {
   position: relative;
-  z-index: 3;
-}.hero-banner {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.hero-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* Dark overlay for text readability */
-  z-index: -1;
-}
-
-.content {
-  color: white;
-  position: relative;
   z-index: 1;
+  max-width: 800px;
   padding: 20px;
 }
+
+.hero-banner h1 {
+  font-size: 3.8rem;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.hero-banner p {
+  margin: 15px auto 30px;
+  font-size: 1.2rem;
+  max-width: 600px;
+}
+
+.hero-banner .btn {
+  background-color: #fff;
+  color: #333;
+  border-color: #fff;
+  padding: 13px 33px;
+  font-size: 1.1rem;
+  transition: all var(--transition-speed) ease;
+}
+
+.hero-banner .btn:hover {
+  background-color: transparent;
+  color: #fff;
+}
+
 
 .hero-banner h1 {
   font-size: 3.8rem;
