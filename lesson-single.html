@@ -89,7 +89,7 @@
 
         @media (max-width: 768px) {
             .lesson-layout { flex-direction: column; }
-            .lesson-sidebar { width: 100%; }
+            .lesson-sideba
             .lesson-sidebar-nav {
                 position: static;
                 display: flex;
@@ -240,7 +240,7 @@
                     contentHTML += `<div class="module-title">${module[`title_${lang}`]}</div>`;
                     let unitsHTML = (module.units || []).map((unit, unitIndex) => {
                         const params = `subjectId=${subject.id}&courseIndex=${courseIndex}&moduleIndex=${moduleIndex}&unitIndex=${unitIndex}&fromPanel=modules`;
-                        const url = `/resources/lessons/course-unit?${params}`;
+                        const url = `/course-unit?${params}`;
                         return `<li class="unit-item"><a href="${url}">${unit[`title_${lang}`]}</a></li>`;
                     }).join('');
                     contentHTML += `<ul class="unit-list">${unitsHTML}</ul>`;
@@ -279,7 +279,7 @@
                 checkCollapseState();
             });
 
-            checkCollapseState(); 
+            checkCollapseState();
         };
 
         const populateResources = (subject, lang) => {
@@ -307,7 +307,7 @@
             document.querySelectorAll('.lesson-nav-link').forEach(l => l.classList.toggle('active', l.dataset.panel === panelId));
             if (panelId === 'discussions') initDisqus(subjectId);
         };
-        
+       
         const setupEventListeners = (subjectId) => {
             document.querySelectorAll('.lesson-nav-link').forEach(link => {
                 link.addEventListener('click', e => {
@@ -354,7 +354,7 @@
                 return;
             }
             const subject = { id: docSnap.id, ...docSnap.data() };
-            
+           
             const updateUIForLanguage = (lang) => {
                 document.title = `${subject[`title_${lang}`]} | Literary Speaking`;
                 document.getElementById('subject-title-main').textContent = subject[`title_${lang}`];
@@ -370,7 +370,7 @@
             setupEventListeners(subjectId);
             updateUIForLanguage(localStorage.getItem('language') || 'en');
             switchPanel(panelToShow, subjectId);
-            
+           
             document.addEventListener('languageChanged', e => updateUIForLanguage(e.detail.lang));
         });
     </script>
