@@ -2,20 +2,20 @@ const siteRouter = {
     pages: {
         "home": "/",
         "about": "/about",
-        "news": "/news/news",
-        "news-single": "/news/news-single",
-        "the-team": "/team/team",
+        "news": "/news",
+        "news-single": "/news-single",
+        "the-team": "/team",
         "contact": "/contact",
         "receive-tutoring": "/receive-tutoring",
         "become-a-tutor": "/become-a-tutor",
         "become-a-volunteer": "/become-a-volunteer",
         "support": "/support",
         "articles": "/articles",
-        "article-single": "/articles/article-single",
-        "lessons": "/lessons/lessons",
-        "lesson-single": "/lessons/lesson-single",
-        "course-unit": "/lessons/course-unit",
-        "member": "/team/members",
+        "article-single": "/article-single",
+        "lessons": "/lessons",
+        "lesson-single": "/lesson-single",
+        "course-unit": "/course-unit",
+        "member": "/members",
         "report-time": "/report-time"
     },
     members: {},
@@ -272,4 +272,5 @@ const siteRouter = {
 document.addEventListener('DOMContentLoaded', () => {
     siteRouter.init();
 });
+
 
