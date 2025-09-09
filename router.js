@@ -1,22 +1,22 @@
 const siteRouter = {
     pages: {
         "home": "/",
-        "about": "/get-to-know-us/about",
-        "news": "/get-to-know-us/news/news",
-        "news-single": "/get-to-know-us/news/news-single",
-        "the-team": "/get-to-know-us/team/team",
-        "contact": "/get-to-know-us/contact",
-        "receive-tutoring": "/get-involved/receive-tutoring",
-        "become-a-tutor": "/get-involved/become-a-tutor",
-        "become-a-volunteer": "/get-involved/become-a-volunteer",
-        "support": "/get-involved/support",
-        "articles": "/resources/articles/articles",
-        "article-single": "/resources/articles/article-single",
-        "lessons": "/resources/lessons/lessons",
-        "lesson-single": "/resources/lessons/lesson-single",
-        "course-unit": "/resources/lessons/course-unit",
-        "member": "/get-to-know-us/team/members",
-        "report-time": "/resources/report-time"
+        "about": "/about",
+        "news": "/news/news",
+        "news-single": "/news/news-single",
+        "the-team": "/team/team",
+        "contact": "/contact",
+        "receive-tutoring": "/receive-tutoring",
+        "become-a-tutor": "/become-a-tutor",
+        "become-a-volunteer": "/become-a-volunteer",
+        "support": "/support",
+        "articles": "/articles",
+        "article-single": "/articles/article-single",
+        "lessons": "/lessons/lessons",
+        "lesson-single": "/lessons/lesson-single",
+        "course-unit": "/lessons/course-unit",
+        "member": "/team/members",
+        "report-time": "/report-time"
     },
     members: {},
     async loadMembers() {
@@ -272,3 +272,4 @@ const siteRouter = {
 document.addEventListener('DOMContentLoaded', () => {
     siteRouter.init();
 });
+
